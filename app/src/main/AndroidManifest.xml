@@ -13,6 +13,12 @@
         android:theme="@style/Theme.SChat"
         tools:targetApi="31">
         <activity
+            android:name=".UsernameLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginOTPActivity"
+            android:exported="false" />
+        <activity
             android:name=".PhoneLoginActivity"
             android:exported="false" />
         <activity
@@ -26,7 +32,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
