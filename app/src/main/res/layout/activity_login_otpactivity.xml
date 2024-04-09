@@ -93,7 +93,8 @@
             android:inputType="number"
             android:background="@drawable/rounded_corner_wrapper"
             android:elevation="5dp"
-            android:maxLength="6"/>
+            android:maxLength="6"
+            android:id="@+id/inputOTP"/>
     </LinearLayout>
 
     <LinearLayout
@@ -105,12 +106,14 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Xác nhận"/>
+            android:text="Xác nhận"
+            android:id="@+id/confirm_btn"/>
         <ProgressBar
             android:layout_width="32dp"
             android:layout_height="wrap_content"
             android:indeterminateTint="@color/primary_color"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:id="@+id/progressBar"/>
     </LinearLayout>
 
     <TextView
@@ -118,5 +121,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="10"
         android:gravity="center"
-        android:text="Gửi lại mã sau 1 phút"/>
+        android:text="Gửi lại mã sau 1 phút"
+        android:id="@+id/resendOTP"/>
 </LinearLayout>
