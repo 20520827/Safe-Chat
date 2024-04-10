@@ -1,6 +1,7 @@
 package com.example.schat;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class LoginOTPActivity extends AppCompatActivity {
-
+    String phoneNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,5 +21,7 @@ public class LoginOTPActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        phoneNumber = getIntent().getExtras().getString("phone");
+        Toast.makeText(getApplicationContext(), phoneNumber, Toast.LENGTH_LONG).show();
     }
 }
