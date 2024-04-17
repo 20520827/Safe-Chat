@@ -83,7 +83,7 @@ public class UsernameLoginActivity extends AppCompatActivity {
             user.setUserName(username);
         }else {
             //User is not in firebase's collection add to collection
-            user = new User(phoneNumber, username, Timestamp.now());
+            user = new User(phoneNumber, username, Timestamp.now(), FirebaseUtil.currentUserId());
         }
         //Navigate to main activity
         FirebaseUtil.currentUserDetail().set(user).addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -1,5 +1,6 @@
 package com.example.schat;
 
+import android.app.DownloadManager;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -9,13 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.schat.adapters.SearchedUsers;
+import com.example.schat.models.User;
+import com.example.schat.utils.FirebaseUtil;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 
 public class SearchUserActivity extends AppCompatActivity {
     EditText searchInput;
     ImageButton backBtn;
     ImageButton searchBtn;
     RecyclerView rv;
+
+    SearchedUsers su;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,5 +60,38 @@ public class SearchUserActivity extends AppCompatActivity {
     }
 
     void setSearchRecycleView(String searchTerm) {
+        Query query = FirebaseUtil.allUsersRef().whereGreaterThanOrEqualTo("userName", searchTerm);
+        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>().setQuery(query, User.class).build();
+        su = new SearchedUsers(options, getApplicationContext());
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(su);
+        su.startListening();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(su!=null)
+        {
+            su.startListening();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(su!=null)
+        {
+            su.stopListening();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(su!=null)
+        {
+            su.startListening();
+        }
     }
 }

@@ -6,18 +6,28 @@ public class User {
     private String phoneNumber;
     private String userName;
     private Timestamp createTime;
+    private  String userId;
 
     public User() {
     }
 
-    public User(String phoneNumber, String userName, Timestamp createTime) {
+    public User(String phoneNumber, String userName, Timestamp createTime, String userId) {
         this.phoneNumber = phoneNumber;
         this.userName = userName;
         this.createTime = createTime;
+        this.userId = userId;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setPhoneNumber(String phoneNumber) {
