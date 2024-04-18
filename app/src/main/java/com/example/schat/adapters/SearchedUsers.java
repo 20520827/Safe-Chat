@@ -1,6 +1,7 @@
 package com.example.schat.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.schat.ChatActivity;
 import com.example.schat.R;
 import com.example.schat.models.User;
+import com.example.schat.utils.AndroidUtil;
 import com.example.schat.utils.FirebaseUtil;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -36,6 +39,10 @@ public class SearchedUsers extends FirestoreRecyclerAdapter<User, SearchedUsers.
 
         userModelView.itemView.setOnClickListener(v -> {
             //Navigate to chat activity
+            Intent intent = new Intent(context, ChatActivity.class);
+            AndroidUtil.passUserAsIntent(intent, user);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         });
     }
 
