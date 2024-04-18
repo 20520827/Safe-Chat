@@ -18,8 +18,11 @@ public class FirebaseUtil {
     public static CollectionReference allUsersRef(){
         return FirebaseFirestore.getInstance().collection("users");
     }
-    public static DocumentReference getChatRoom(String id){
-        return FirebaseFirestore.getInstance().collection("chatrooms").document(id);
+    public static DocumentReference getChatRoom(String chatroomId){
+        return FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId);
+    }
+    public static CollectionReference getChatMessages(String chatroomId){
+        return getChatRoom(chatroomId).collection("chats");
     }
     public static String getChatRoomId(String userId1, String userId2) {
         if(userId1.hashCode() < userId2.hashCode()) {

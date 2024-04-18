@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.schat.models.ChatMessage;
 import com.example.schat.models.ChatRoom;
 import com.example.schat.models.User;
 import com.example.schat.utils.AndroidUtil;
@@ -20,6 +21,7 @@ import com.example.schat.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
@@ -55,9 +57,28 @@ public class ChatActivity extends AppCompatActivity {
         backBtn.setOnClickListener(v -> {
             onBackPressed();
         });
-
+        sendBtn.setOnClickListener(v -> {
+            String message = userInput.getText().toString();
+            sendMessage(message);
+        });
         otherUsername.setText(otherUser.getUserName());
         generateChatRoom();
+    }
+
+    void sendMessage(String message) {
+        cRoom.setLastMessageTimestamp(Timestamp.now());
+        cRoom.setLastMessageId(FirebaseUtil.currentUserId());
+        FirebaseUtil.getChatRoom(chatroomId).set(cRoom);
+
+        ChatMessage cm = new ChatMessage(message, FirebaseUtil.currentUserId(), Timestamp.now());
+        FirebaseUtil.getChatMessages(chatroomId).add(cm).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful()){
+                    userInput.setText("");
+                }
+            }
+        });
     }
 
     void generateChatRoom() {
