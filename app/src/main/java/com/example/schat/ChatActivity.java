@@ -11,24 +11,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.schat.adapters.SearchedUsers;
+import com.example.schat.adapters.SentMessages;
 import com.example.schat.models.ChatMessage;
 import com.example.schat.models.ChatRoom;
 import com.example.schat.models.User;
 import com.example.schat.utils.AndroidUtil;
 import com.example.schat.utils.FirebaseUtil;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
 
 public class ChatActivity extends AppCompatActivity {
     User otherUser;
     String chatroomId;
+    SentMessages cmAdapter;
     ChatRoom cRoom;
     TextView otherUsername;
     RecyclerView rv;
@@ -63,6 +69,25 @@ public class ChatActivity extends AppCompatActivity {
         });
         otherUsername.setText(otherUser.getUserName());
         generateChatRoom();
+        setChatRecyclerView();
+    }
+
+    void setChatRecyclerView() {
+        Query query = FirebaseUtil.getChatMessages(chatroomId).orderBy("timestamp", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<ChatMessage> options = new FirestoreRecyclerOptions.Builder<ChatMessage>().setQuery(query, ChatMessage.class).build();
+        cmAdapter = new SentMessages(options, getApplicationContext());
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setReverseLayout(true);
+        rv.setLayoutManager(manager);
+        rv.setAdapter(cmAdapter);
+        cmAdapter.startListening();
+        cmAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                rv.smoothScrollToPosition(0);
+            }
+        });
     }
 
     void sendMessage(String message) {
